@@ -1,0 +1,59 @@
+<!DOCTYPE HTML>
+<html ng-app="MyModule">
+	<head>
+		<meta charset="UTF-8" />
+		<title>angularjs-$execptionHander</title>
+		<link href="css/bootstrap.min.css" rel="stylesheet" />
+		<script type="text/javascript" src="freamwork/angular-1.3.0.js"></script>
+		<style type="text/css">
+		</style>
+	</head>
+	<body>
+		<div ng-controller="execCtrl">
+			<p ng-repeat="error in errors">{{error}}</p>
+		</div>		
+
+
+
+
+	<script type="text/javascript">
+	
+		var myModule = angular.module('MyModule', []);
+
+		myModule.controller('execCtrl', function ($scope){
+
+		})
+		.factory('$exceptionHandler', function ($injector){
+			return function (exception, cause){
+				//console.log(exception, cause);
+				var $rootScope = $injector.get('$rootScope');
+				$rootScope.errors = $rootScope.errors || [];
+				$rootScope.errors.push(exception.message);
+				console.log($rootScope.errors);
+			};
+		})
+		.run(function ($http){
+
+			function success (result){
+				console.log('get data');
+				console.log(result.data.length, 'data found');
+				
+				/*
+				**捕获这个错误
+				*/
+				result.count();
+			};
+			function error (error){
+				console.log('error');
+				console.log(error);
+			};
+
+			$http.get('https://api.github.com/users/bclinkinbeard/repos')
+			.then(success, error);
+
+
+		});
+
+	</script>
+	</body>
+</html>

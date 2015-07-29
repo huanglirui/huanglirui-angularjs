@@ -1,0 +1,61 @@
+<!DOCTYPE HTML>
+<html ng-app="MyModule">
+	<head>
+		<meta charset="UTF-8" />
+		<title>angularjs</title>
+		<link href="css/bootstrap.min.css" rel="stylesheet" />
+		<script type="text/javascript" src="freamwork/angular-1.3.0.js"></script>
+		<script type="text/javascript" src="freamwork/angular/angular-animate.min.js"></script>
+		<style type="text/css">
+
+		</style>
+	</head>
+	<body>
+	<div ng-controller="cacheCtrls"> 
+		<form action="">
+			<label for="" class="form-group">
+				<input type="text" class="form-control" ng-model="cacheKey" placeholder="key" ng />
+			</label>
+			<label for="" class="form-group">
+				<input type="text" class="form-control" ng-model="cacheValue" placeholder="vaule" />		
+			</label>
+			<button class="btn btn-primary" ng-click="put(cacheKey, cacheValue)">cache</button>
+		</form>
+		<div style="margin-top:20px;">
+			<div class="panel panel-primary">
+			   <div class="panel-heading">cache value</div>
+			   <div class="panel-body" ng-repeat="key in keys">
+			   	<p>key:{{key}}</p>
+			   	<p>value:{{cache.get(key)}}</p>
+			   </div>
+			</div>
+		</div>
+		<div style="margin-top:20px">
+			<div class="panel panel-success">
+				<div class="panel-heading">cache infomation</div>
+				<div class="panel-body" ng-repeat="(key, value) in cache.info()">
+					<p>key:{{key}}</p>
+					<p>value:{{value}}</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script>
+		var myModule = angular.module('MyModule', []);
+		
+		myModule.controller('cacheCtrls', function ($scope, $cacheFactory){
+			$scope.keys = ['first'];
+			$scope.cache = $cacheFactory('cacheId');
+			$scope.cache.put('first', 'i am the firstValue');
+			$scope.put = function (key, val){
+				$scope.keys.push(key);
+				$scope.cache.put(key, val);
+			};
+		});
+
+
+
+
+	</script>	
+	</body>
+</html>

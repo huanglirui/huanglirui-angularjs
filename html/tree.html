@@ -1,0 +1,123 @@
+<!DOCTYPE HTML>
+<html ng-app="MyModule">
+	<head>
+		<meta charset="UTF-8" />
+		<title>angularjs-tree</title>
+		<link href="../css/bootstrap.min.css" rel="stylesheet" />
+		<script type="text/javascript" src="../freamwork/angular-1.3.0.js"></script>
+		<script type="text/javascript" src="../freamwork/angular-animate.js"></script>
+		<style type="text/css">
+		body {
+			padding-bottom: 100px;
+		}
+		li {
+			list-style: none;
+		}
+		.ng-enter {
+			opacity: 0;
+			transition: all 0.3s ease;
+		}
+		.ng-enter-active {
+			opacity: 1;
+		}
+		.ng-leave {
+			opacity: 1;
+			transition: all 0.3s ease;
+		}
+		.ng-leave-active {
+			opacity: 0;
+		}
+		
+		</style>
+	</head>
+	<body>
+		<div ng-controller="dirCtrl">
+				
+			<script type="text/ng-template" id="tree.html">
+
+			  <ul>
+			  		<li ng-repeat="item in items">
+			  			<input type="checkbox" ng-model="item.itemSelected" name="itemSelect" ng-if="item.children" />
+			  			{{item.text}}
+			  			<div ng-include="'tree.html'" onload="items=item.children"  ng-if="!item.itemSelected"></div>
+			  		</li>
+			  </ul>	
+
+			</script>
+
+			<div ng-include="'tree.html'"></div>
+		
+		</div>
+
+			
+		
+
+
+	<script type="text/javascript">
+		
+		var myModule = angular.module('MyModule', ['ngAnimate']);
+
+		myModule.controller('dirCtrl', ['$scope', function ($scope){
+			
+			$scope.items = [
+				{
+					text: 'item_1',
+					children: [
+						{
+							text: 'item_1_1',
+							children: [
+								{
+									text: 'item_1_1_1'
+								},
+								{
+									text: 'item_1_1_2'
+								}
+							]
+						},
+						{
+							text: 'item_1_2',
+							children: [
+								{
+									text: 'item_1_2_1'
+								},
+								{
+									text: 'item_1_2_2'
+								}
+							]
+						}
+					]
+				},
+				{
+					text: 'item_2',
+					children: [
+						{
+							text: 'item_2_1',
+							children: [
+								{
+									text: 'item_2_1_1'
+								},
+								{
+									text: 'item_2_1_2'
+								}
+							]
+						},
+						{
+							text: 'item_2_2',
+							children: [
+								{
+									text: 'item_2_2_1'
+								},
+								{
+									text: 'item_2_2_2'
+								}
+							]
+						}
+					]
+				}
+			];
+		
+		}]);
+
+	</script>
+	</body>
+</html>

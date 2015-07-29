@@ -1,0 +1,69 @@
+<!DOCTYPE HTML>
+<html ng-app="MyModule">
+	<head>
+		<meta charset="UTF-8" />
+		<title>angularjs-$parse</title>
+		<link href="css/bootstrap.min.css" rel="stylesheet" />
+		<script type="text/javascript" src="freamwork/angular-1.3.0.js"></script>
+		<script type="text/javascript" src="freamwork/angular/angular-animate.min.js"></script>
+		<script type="text/javascript" src="js/controler.js"></script>
+		<style type="text/css">
+		</style>
+	</head>
+	<body>
+		<div ng-controller="parseCtrls">
+			<my-parse></my-parse>
+			<my-one eq="4+3"></my-one>
+			<my-one eq="4*4"></my-one>
+			<my-one eq="4===4"></my-one>
+			<my-one eq="4===5"></my-one>
+		</div>
+			
+		
+
+
+	<script type="text/javascript">
+		
+		var myModule = angular.module('MyModule', []);
+
+		myModule.controller('parseCtrls', ['$scope', function ($scope){
+
+		}]);
+
+		myModule.directive('myParse', function ($parse){
+			return {
+				restrict: 'E',
+				template: '<div>{{name}}</div>',
+				link: function (scope, ele, attrs){
+					/*var getter = $parse('user.name');
+				  	var setter = getter.assign;
+				  	var context = {user:{name:'angular'}};
+				  	var locals = {user:{name:'local'}};*/
+				  	var getter = $parse('user.name');
+				  	var context = {user: {name: 'huanglirui'}};
+				  	var parent = {user: {name: 'mengfahong'}};
+				  	scope.name = getter(parent);
+				}
+			};
+		});
+
+		myModule.directive('myOne', function ($parse){
+			return {
+				restrict: 'E',
+				template: '<div>{{inner}}</div>',
+				scope: {},
+				link: function (scope, ele, attrs){
+					scope.inner = $parse(attrs.eq)();
+					/*$parse(attrs.eq)();
+					**
+					**scope.inner = function (){ return attrs.eq; }
+					**
+					*/
+
+				}
+			};
+		});
+
+	</script>
+	</body>
+</html>

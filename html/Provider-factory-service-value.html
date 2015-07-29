@@ -1,0 +1,172 @@
+<!DOCTYPE HTML>
+<html ng-app="MyModule">
+	<head>
+		<meta charset="UTF-8" />
+		<title>angularjs -- provider-factory-service-decorator-constant-value</title>
+		<link href="../css/bootstrap.min.css" rel="stylesheet" />
+		<script type="text/javascript" src="../freamwork/angular-1.3.0.js"></script>
+		<script type="text/javascript" src="../freamwork/angular-animate.js"></script>
+		<style type="text/css">
+			body {
+				padding: 50px;
+			}
+		</style>
+	</head>
+	<body>
+		<div ng-controller="providerCtrl">
+			<div>
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						<h1>服务的注入</h1>
+					</div>
+					<div class="panel-body">
+						<p>{{providerValue1}}</p>
+						<p>{{providerValue2}}</p>
+						<p>{{factoryValue}}</p>
+						<p>{{serviceValue}}</p>
+						<p>{{serviceValue1}}</p>
+						<p>{{constantValue}}</p>
+						<p>{{valueValue}}</p>
+					</div>
+				</div>
+			</div>
+		</div>
+			
+
+
+	<script type="text/javascript">
+		
+		var myModule  = angular.module('MyModule', []);
+
+		myModule.config(function ($provide){
+			$provide.decorator('theService', function ($delegate){
+				$delegate.s1 = 'service $delegate';
+				return $delegate;
+			});
+		});
+
+		myModule.controller('providerCtrl', ['$scope', 'theFactory', 'theService', 'theProvider1', 'theProvider2', 'theConstant', 'theValue', function ($scope, theFactory, theService, theProvider1, theProvider2, theConstant, theValue){
+			
+			$scope.factoryValue = theFactory.f;
+
+			$scope.serviceValue = theService.s;
+			$scope.serviceValue1 = theService.s1;
+
+			$scope.providerValue1 = theProvider1;
+			$scope.providerValue2 = theProvider2;
+			$scope.constantValue = theConstant;
+			$scope.valueValue = theValue;
+
+		}]);
+
+		myModule.provider('theProvider1', function (){
+			this.$get = function (){
+				return 'provider1';
+			};
+		});
+
+		myModule.provider('theProvider2', {
+			$get: function (){
+				return 'provider2'
+			}
+		});
+
+		myModule.factory('theFactory', function (){
+			var f = {
+				'f': 'factory'
+			};
+			return f;
+		});
+
+		myModule.service('theService', function (){
+			this.s = 'service';
+		});
+
+		myModule.constant('theConstant', 'constant');
+
+		myModule.value('theValue', 'value');
+
+
+		//注意：需要使用.config()来配置服务的时候不能使用service()和factory()方法（也就是不能注入service和factory）
+		//provider定义服务的时候不可以使用内置的服务比如$window等
+		
+		/*例如
+		**
+		**myModule.config(function (userProvider){ userProvider.get(); });
+		**
+		**myModule.provider('user', function (){ this.$get = function (var obj; return obj;){}; })
+		*/
+
+
+		//value  和   constant的比较  -->涉及到decorator
+		/*
+		**1、value可以被修改，constant一旦声明无法修改。
+		**2、value不可以在config里面注入，但是constant可以在config里面注入
+		**
+		*/
+
+		//decorator，重新装饰，constant是无法重新装饰的
+		//$provide.decorator('服务名称', function ($delegate){ return $delegate+1; })  
+
+
+
+		/*
+		**factory --> provider
+		**myModule.factory('myFactory', function (){
+			var factory = {};
+			//给对象添加属性和方法
+			return factory;	
+		}); 
+		**
+		**
+		*/
+
+		/*
+		**service --> provider
+		**myModule.service('myservice', function (){
+			var that = this;
+			//在this的身上添加属性和方法
+		}); 
+		**
+		**
+		*/
+
+		
+
+	</script>
+
+	<script>
+		//config配置provider
+		myModule.config(function (userProvider){
+			userProvider.setBackEnd('http://lcoalhost:8080');
+		});
+
+		myModule.provider('user', function (){
+			this.backEnd = 'http://lcoalhost:3000';
+			this.setBackEnd = function (newUrl){
+				if (newUrl) this.backEnd = newUrl;
+			};
+			this.$get = function (){
+				var _this = this;
+				var service = {
+					user: {},
+					setUser: function (userName){
+						service.user['userName'] = userName; 
+					},
+					setEmail: function (email){
+						service.user['email'] = email;
+					},
+					save: function ($http){
+						$http.post(_this.backEnd + '/user', {
+							user: service.user
+						})
+					}
+				};
+				return service;
+			};
+		});
+
+
+	</script>
+	</body>
+</html>

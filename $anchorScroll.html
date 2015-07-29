@@ -1,0 +1,44 @@
+<!DOCTYPE HTML>
+<html ng-app="MyModule">
+	<head>
+		<meta charset="UTF-8" />
+		<title>angularjs</title>
+		<link href="css/bootstrap.min.css" rel="stylesheet" />
+		<script type="text/javascript" src="freamwork/angular-1.3.0.js"></script>
+		<script type="text/javascript" src="freamwork/angular/angular-animate.min.js"></script>
+		<script type="text/javascript" src="js/controler.js"></script>
+		<style type="text/css">
+		</style>
+	</head>
+	<body>
+	<div  ng-controller="anchorScrollCtrls" >
+		<h1>classes</h1>
+		<button class="btn btn-primary" ng-click="nextClass()">nextClass</button>
+		<button class="btn btn-primary" ng-click="currentClass()">currentClass</button>
+		<div style="width:70%;margin:10px auto;height:400px;background-color:pink;" id="box1">box1</div>
+		<div style="width:70%;margin:10px auto;height:400px;background-color:pink;" id="box2">box2</div>
+		<div style="width:70%;margin:10px auto;height:400px;background-color:pink;" id="box3">box3</div>
+		<div style="width:70%;margin:10px auto;height:400px;background-color:pink;" id="box4">box4</div>
+		<div style="width:70%;margin:10px auto;height:400px;background-color:pink;" id="box5">box5</div>
+		<div style="width:70%;margin:10px auto;height:400px;background-color:pink;" id="box6">box6</div>
+		
+
+	</div>
+
+	<script type="text/javascript">
+		var myModule = angular.module('MyModule', []);
+
+		myModule.controller('anchorScrollCtrls', function ($scope, $location, $anchorScroll){
+			$anchorScroll.yOffset = 15;
+			$scope.nextClass = function (){
+				$location.hash('box3');
+				$anchorScroll();
+			};
+			$scope.currentClass = function (){
+				$anchorScroll();
+			};
+		});
+
+	</script>
+	</body>
+</html>

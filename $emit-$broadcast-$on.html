@@ -1,0 +1,59 @@
+<!DOCTYPE HTML>
+<html ng-app="MyModule">
+	<head>
+		<meta charset="UTF-8" />
+		<title>angularjs-$emit-$broadcast-$on</title>
+		<link href="css/bootstrap.min.css" rel="stylesheet" />
+		<script type="text/javascript" src="freamwork/angular-1.3.0.js"></script>
+		<script type="text/javascript" src="freamwork/angular/angular-animate.min.js"></script>
+		<script type="text/javascript" src="js/controler.js"></script>
+		<style type="text/css">
+		</style>
+	</head>
+	<body>
+		<div ng-controller="rootCtrl">
+		<p>{{root}}和{{parent}}和{{child}}</p>
+			<div ng-controller="parentCtrl">
+			<p>{{root}}和{{parent}}和{{child}}和{{dad}}</p>
+				<div ng-controller="childCtrl">
+				<p>{{root}}和{{parent}}和{{child}}和{{dad}}</p>
+				</div>
+			</div>	
+		</div>
+
+			
+		
+
+
+	<script type="text/javascript">
+		
+		var myModule = angular.module('MyModule', []);
+
+		myModule.controller('rootCtrl', ['$scope', function ($scope){
+			$scope.root = 'root';
+			$scope.$on('to-top', function (event, data){
+				$scope.child = data;
+			});
+			$scope.$on('to-parent', function (event, data){
+				$scope.parent = data;
+			});
+		}]);
+
+		myModule.controller('parentCtrl', ['$scope', function ($scope){
+			$scope.parent = 'parent';
+			$scope.$on('to-top', function (event, data){
+				$scope.child = data;
+			});
+			$scope.$emit('to-parent', 'parent');
+			
+		}]);
+
+		myModule.controller('childCtrl', ['$scope', function ($scope){
+			$scope.child = 'child';
+			$scope.$emit('to-top', 'child');
+			
+		}]);
+
+	</script>
+	</body>
+</html>

@@ -1,0 +1,33 @@
+<!doctype html>
+<head>
+	<meta charset="utf-8">
+	<title>angularjs-$route</title>
+	<link href="../css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body ng-app="routeApp">
+	<h1>Route Demo index</h1>
+
+	<div ng-view></div>
+
+	
+	<script type="text/javascript" src="../freamwork/angular-1.3.0.js"></script>
+	<script type="text/javascript" src="../freamwork/angular-route.js"></script>
+	<script type="text/javascript">
+		var routeApp = angular.module('routeApp',['ngRoute']);
+		routeApp.config(['$routeProvider',function ($routeProvider) {
+		      $routeProvider
+		      .when('/list', {
+		        template: '<h1>i am the  list</h1>',
+		        controller: 'RouteListCtl'
+		      })
+		      .when('/list/:id', {
+		          templateUrl: '<h1>i am the list1</h1>',
+		          controller: 'RouteDetailCtl'
+		      })
+		      .otherwise({
+		        redirectTo: '/list'
+		      });
+		}]);
+	</script>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE HTML>
+<html ng-app="MyModule">
+	<head>
+		<meta charset="UTF-8" />
+		<title>angularjs</title>
+		<link href="css/bootstrap.min.css" rel="stylesheet" />
+		<script type="text/javascript" src="freamwork/angular-1.3.0.js"></script>
+		<script type="text/javascript" src="freamwork/angular/angular-animate.min.js"></script>
+		<script type="text/javascript" src="js/controler.js"></script>
+		<style type="text/css">
+		</style>
+	</head>
+	<body>
+		<div style="margin-top:20px;" ng-controller="oneCtrls" class="row">
+			<input type="text" class="form-control" ng-model="name" />
+			<button class="btn btn-primary" ng-click="handle(name)">$rootScope</button>
+		</div style="margin-top:20px;">
+
+		<div style="margin-top:20px;" ng-controller="twoCtrls">
+			<input type="text" class="form-control" ng-model="name"  />
+		</div style="margin-top:20px;">
+
+		<div style="margin-top:20px;" ng-controller="threeCtrls">
+			<input type="text" class="form-control" ng-model="name"  />
+		</div style="margin-top:20px;">
+			
+	<script type="text/javascript">
+		
+			var myModule = angular.module('MyModule', []);
+
+			myModule.controller('oneCtrls', function ($scope, shareService){
+				$scope.handle = function (msg){
+						shareService.getMsg(msg);
+				};
+				$scope.$on('passMsg', function (){
+					$scope.name = 'ONE' + shareService.message;
+				});
+			});
+
+			myModule.controller('twoCtrls', function ($scope, shareService){
+					$scope.$on('passMsg', function (){
+						$scope.name = 'TWO' + shareService.message;
+					});
+			});
+
+			myModule.controller('threeCtrls', function ($scope, shareService){
+					$scope.$on('passMsg', function (){
+						$scope.name = 'THREE' + shareService.message;
+					});
+			});	
+
+			myModule.factory('shareService', function ($rootScope){
+				var obj = {};
+				obj.getMsg = function (msg){
+					this.message = msg;
+					this.handleBroadCase();
+				};
+				obj.handleBroadCase = function (){
+					$rootScope.$broadcast('passMsg');
+				};
+				return obj;
+			});
+
+
+	</script>
+	</body>
+</html>

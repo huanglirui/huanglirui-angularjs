@@ -1,0 +1,102 @@
+<!DOCTYPE HTML>
+<html ng-app="MyModule">
+	<head>
+		<meta charset="UTF-8" />
+		<title>angularjs-$filter</title>
+		<link href="css/bootstrap.min.css" rel="stylesheet" />
+		<script type="text/javascript" src="freamwork/angular-1.3.0.js"></script>
+		<script type="text/javascript" src="freamwork/angular/angular-animate.min.js"></script>
+		<script type="text/javascript" src="js/controler.js"></script>
+		<style type="text/css">
+		</style>
+	</head>
+	<body>
+		<div ng-controller="filterCtrls" style="margin-bottom:50px;">
+			<p>{{lower}}</p>
+			<p>{{upper}}</p>
+		</div>
+		
+		<div ng-controller="ctrls">
+			<input type="text" class="form-control" ng-model="search.$" /> <!--search.name  search.book-->
+			<div class="list-group">
+				<a href="#" style="margin:5px;" ng-repeat="data in datas | orderBy:'name' | limitTo:2 | filter:search" class="list-group-item list-group-item-danger">{{data.name}}:   {{data.book}}</a>
+			</div>
+		</div>
+
+	   <div ng-controller="reverseCtrls">
+			<input type="text" class="form-control" ng-model="txt" />
+			<p>{{txt | reverse}}</p>
+		</div>
+
+		<div ng-controller="totalCtrls" style="margin-top:50px;">
+			<table class="table table-bordered">
+				<thead>
+	  				<tr>
+	  					<th>ID</th>
+	  					<th>NAME</th>
+	  					<th>SALE</th>
+	  					<th>DISCOUNT</th>
+	  					<th>TOTAL</th>
+	  				</tr>
+	  			</thead>
+	  			<tbody>
+	  				<tr ng-repeat="data in datas | orderBy:'sale + discount'">
+	  					<td>{{data.id}}</td>
+	  					<td>{{data.name}}</td>
+	  					<td>{{data.sale | currency}}</td>
+	  					<td>{{data.discount | currency}}</td>
+	  					<td>{{data.sale + data.discount | currency}}</td>
+	  				</tr>
+	  			</tbody>
+  			</table>
+		</div>
+
+
+	<script type="text/javascript">
+
+		/*
+		**filter的使用方法：filter(text), $filter('uppercase')(text);
+		**
+		*/
+		var myModule = angular.module('MyModule', []);
+
+		myModule.controller('filterCtrls', function ($scope, $filter){
+			$scope.lower = 'huanglirui';
+			$scope.upper = $filter('uppercase')($scope.lower);
+		});
+
+		myModule.controller('ctrls', function ($scope){
+			$scope.datas = [
+				{name: 'huanglirui', book: 'javascript'},
+				{name: 'mengfahong', book: 'jquery'},
+				{name: 'wangjie', book: 'angularjs'},
+				{name: 'heyuanfei', book: 'html5+css3'}
+			];
+		});
+
+		myModule.controller('reverseCtrls', function ($scope){
+			$scope.txt = 'placehloder  ';
+		});
+
+		myModule.filter('reverse', function (){
+			return function (text){
+				var str = text.split('').reverse().join('')
+				return str; //reverse出现了报错
+			};
+		});
+
+		myModule.controller('totalCtrls', function ($scope){
+			$scope.datas = [
+				{id: 1, name: 'huanglirui', sale: 193, discount: 34},
+				{id: 2, name: 'heyuanfei', sale: 187, discount: 45},
+				{id: 3, name: 'mengfahong', sale: 156, discount: 64},
+				{id: 4, name: 'wangjie', sale: 176, discount: 25},
+				{id: 5, name: 'zhongwenhao', sale: 156, discount: 18}
+			];
+		});
+
+		
+
+	</script>
+	</body>
+</html>
